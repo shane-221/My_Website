@@ -372,7 +372,7 @@
         <!-- You can delete the links only if you've purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a href="https://bootstrapmade.com/tools/">DevTools</a>
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a href="https://bootstrapmade.com/tools/">DevTools</a> | <a href="#" id="cookie-settings">Cookie settings</a>
       </div>
     </div>
 
@@ -393,6 +393,73 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <!-- Cookie consent banner (Google Analytics loads only after Accept) -->
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent" hidden>
+    <p>This site uses Google Analytics cookies to understand how visitors find and use it. The site works the same either way.</p>
+    <div class="cookie-actions">
+      <button type="button" class="cookie-btn cookie-decline" id="cookie-decline">Decline</button>
+      <button type="button" class="cookie-btn cookie-accept" id="cookie-accept">Accept</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var GA_ID = 'G-ZEDP7Y0M8X';
+      var KEY = 'analytics-consent';
+      var banner = document.getElementById('cookie-banner');
+      var loaded = false;
+
+      function getChoice() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+      function setChoice(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+
+      function loadGA() {
+        if (loaded) return;
+        loaded = true;
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { dataLayer.push(arguments); };
+        gtag('consent', 'default', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+        gtag('js', new Date());
+        gtag('config', GA_ID, { anonymize_ip: true });
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+        document.head.appendChild(s);
+      }
+
+      function clearGACookies() {
+        document.cookie.split(';').forEach(function (c) {
+          var name = c.split('=')[0].trim();
+          if (name.indexOf('_ga') === 0) {
+            ['', '; domain=.' + location.hostname, '; domain=' + location.hostname].forEach(function (d) {
+              document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + d;
+            });
+          }
+        });
+      }
+
+      function showBanner() { banner.hidden = false; }
+      function hideBanner() { banner.hidden = true; }
+
+      document.getElementById('cookie-accept').addEventListener('click', function () {
+        setChoice('granted'); hideBanner(); loadGA();
+      });
+      document.getElementById('cookie-decline').addEventListener('click', function () {
+        var wasGranted = getChoice() === 'granted';
+        setChoice('denied'); hideBanner(); clearGACookies();
+        if (wasGranted) location.reload();
+      });
+      var settings = document.getElementById('cookie-settings');
+      if (settings) settings.addEventListener('click', function (e) { e.preventDefault(); showBanner(); });
+
+      var choice = getChoice();
+      if (choice === 'granted') loadGA();
+      else if (choice !== 'denied') showBanner();
+    })();
+  </script>
+
+
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "d6d2ef26592a43b18f7688c7a759b602"}'></script><!-- End Cloudflare Web Analytics -->
 
 </body>
 
